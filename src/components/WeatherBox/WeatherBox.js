@@ -7,21 +7,14 @@ import React from 'react';
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [city, setCity] = useState({
+  const [weather, setWeather] = useState({
     city: '',
     temp: '',
     icon: '',
     description: '',
   });
 
-  const handleCityChange = useCallback((city) => {
-    if (!city) {
-      return;
-    }
-
-    setIsLoading(true);
-    setIsError(false);
-
+  const fetchData = (city) => {
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a9302906cfdb7f28449954dd9590d745&units=metric`
     )
@@ -38,13 +31,24 @@ const WeatherBox = (props) => {
           description: data.weather[0].main,
         };
 
-        setCity(weatherData);
+        setWeather(weatherData);
       })
       .catch((err) => {
         setIsError(true);
         console.log(err.message);
       })
       .finally(() => setIsLoading(false));
+  };
+
+  const handleCityChange = useCallback((city) => {
+    if (!city) {
+      return;
+    }
+
+    fetchData(city);
+
+    setIsLoading(true);
+    setIsError(false);
   }, []);
 
   return (
@@ -54,7 +58,7 @@ const WeatherBox = (props) => {
         <h1>404 Error</h1>
       ) : (
         <React.Fragment>
-          {!isLoading ? <WeatherSummary data={city} /> : <Loader />}
+          {!isLoading ? <WeatherSummary weather={weather} /> : <Loader />}
         </React.Fragment>
       )}
     </section>

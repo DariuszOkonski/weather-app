@@ -1,7 +1,7 @@
 import styles from './WeatherSummary.module.scss';
 
-const WeatherSummary = ({ data }) => {
-  if (!data?.city) {
+const WeatherSummary = ({ weather }) => {
+  if (!weather?.city) {
     return null;
   }
 
@@ -9,16 +9,16 @@ const WeatherSummary = ({ data }) => {
     <section className={styles.weatherSummary}>
       <img
         className={styles.weatherIcon}
-        alt={data.city}
-        src={`${process.env.PUBLIC_URL}/images/weather-icons/${data.icon}.png`}
+        alt={weather.city}
+        src={`${process.env.PUBLIC_URL}/images/weather-icons/${weather.icon}.png`}
       />
       <div className={styles.weatherInfo}>
-        <h2>{data.city}</h2>
+        <h2>{weather.city}</h2>
         <p>
-          <strong>Temp:</strong> {data.temp}°C
+          <strong>Temp:</strong> {weather.temp}°C
         </p>
         <p>
-          <strong>Description:</strong> {data.description}
+          <strong>Description:</strong> {weather.description}
         </p>
       </div>
     </section>
