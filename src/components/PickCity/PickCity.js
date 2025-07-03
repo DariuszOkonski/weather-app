@@ -4,12 +4,12 @@ import styles from './PickCity.module.scss';
 
 import { useState } from 'react';
 
-const PickCity = ({ onSubmit }) => {
+const PickCity = ({ onCityChange }) => {
   const [city, setCity] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(city);
+    onCityChange(city);
     setCity('');
   };
 
