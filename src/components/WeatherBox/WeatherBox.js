@@ -7,6 +7,12 @@ import React from 'react';
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [city, setCity] = useState({
+    city: '',
+    temp: '',
+    icon: '',
+    description: '',
+  });
 
   const handleCityChange = useCallback((city) => {
     if (!city) {
@@ -32,7 +38,7 @@ const WeatherBox = (props) => {
           description: data.weather[0].main,
         };
 
-        console.log('weatherData: ', weatherData);
+        setCity(weatherData);
       })
       .catch((err) => {
         setIsError(true);
@@ -48,7 +54,7 @@ const WeatherBox = (props) => {
         <h1>404 Error</h1>
       ) : (
         <React.Fragment>
-          {!isLoading && !isError ? <WeatherSummary /> : <Loader />}
+          {!isLoading ? <WeatherSummary data={city} /> : <Loader />}
         </React.Fragment>
       )}
     </section>
