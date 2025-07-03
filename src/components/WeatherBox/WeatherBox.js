@@ -2,9 +2,11 @@ import PickCity from '../PickCity/PickCity';
 import WeatherSummary from '../WeatherSummary/WeatherSummary';
 import Loader from '../Loader/Loader';
 import { useState, useCallback } from 'react';
+import React from 'react';
 
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleCityChange = useCallback((city) => {
     if (!city) {
@@ -12,6 +14,7 @@ const WeatherBox = (props) => {
     }
 
     setIsLoading(true);
+    setIsError(false);
 
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a9302906cfdb7f28449954dd9590d745&units=metric`
@@ -31,14 +34,23 @@ const WeatherBox = (props) => {
 
         console.log('weatherData: ', weatherData);
       })
-      .catch((err) => console.log(err.message))
+      .catch((err) => {
+        setIsError(true);
+        console.log(err.message);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
   return (
     <section>
       <PickCity onCityChange={handleCityChange} />
-      {!isLoading ? <WeatherSummary /> : <Loader />}
+      {isError ? (
+        <h1>404 Error</h1>
+      ) : (
+        <React.Fragment>
+          {!isLoading && !isError ? <WeatherSummary /> : <Loader />}
+        </React.Fragment>
+      )}
     </section>
   );
 };
