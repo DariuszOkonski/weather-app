@@ -1,18 +1,18 @@
 import PickCity from '../PickCity/PickCity';
 import WeatherSummary from '../WeatherSummary/WeatherSummary';
 import Loader from '../Loader/Loader';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCityChange = (city) => {
+  const handleCityChange = useCallback((city) => {
     if (!city) {
       return;
     }
 
     console.log('WeatherBox city: ', city);
-  };
+  }, []);
 
   return (
     <section>
