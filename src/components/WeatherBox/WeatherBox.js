@@ -7,6 +7,10 @@ const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCityChange = (city) => {
+    if (!city) {
+      return;
+    }
+
     console.log('WeatherBox city: ', city);
   };
 
