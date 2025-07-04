@@ -8,6 +8,7 @@ import styles from './WeatherBox.module.scss';
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [weather, setWeather] = useState({
     city: '',
     temp: '',
@@ -16,15 +17,21 @@ const WeatherBox = (props) => {
   });
 
   const fetchData = (city) => {
+    setIsLoading(true);
+    setIsError(false);
+    setErrorMessage('');
+
     fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a9302906cfdb7f28449954dd9590d745&units=metric`
     )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.cod === '404') {
-          throw new Error(data.message);
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error(res.statusText);
         }
 
+        return res.json();
+      })
+      .then((data) => {
         const weatherData = {
           city: data.name,
           temp: data.main.temp,
@@ -36,6 +43,7 @@ const WeatherBox = (props) => {
       })
       .catch((err) => {
         setIsError(true);
+        setErrorMessage(err.message);
         console.log(err.message);
       })
       .finally(() => setIsLoading(false));
@@ -47,16 +55,13 @@ const WeatherBox = (props) => {
     }
 
     fetchData(city);
-
-    setIsLoading(true);
-    setIsError(false);
   }, []);
 
   return (
     <section>
       <PickCity onCityChange={handleCityChange} />
       {isError ? (
-        <h1 className={styles.header}>404 Error</h1>
+        <h1 className={styles.header}>{errorMessage}</h1>
       ) : (
         <React.Fragment>
           {!isLoading ? <WeatherSummary weather={weather} /> : <Loader />}
