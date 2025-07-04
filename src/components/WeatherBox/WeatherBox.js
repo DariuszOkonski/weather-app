@@ -3,6 +3,7 @@ import WeatherSummary from '../WeatherSummary/WeatherSummary';
 import Loader from '../Loader/Loader';
 import { useState, useCallback } from 'react';
 import React from 'react';
+import styles from './WeatherBox.module.scss';
 
 const WeatherBox = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,7 @@ const WeatherBox = (props) => {
     <section>
       <PickCity onCityChange={handleCityChange} />
       {isError ? (
-        <h1>404 Error</h1>
+        <h1 className={styles.header}>404 Error</h1>
       ) : (
         <React.Fragment>
           {!isLoading ? <WeatherSummary weather={weather} /> : <Loader />}
