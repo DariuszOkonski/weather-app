@@ -61,9 +61,7 @@ const WeatherBox = (props) => {
     <section>
       <PickCity onCityChange={handleCityChange} />
       {isError ? (
-        <ErrorBox>
-          <h1>{errorMessage}</h1>
-        </ErrorBox>
+        <ErrorBox>{errorMessage}</ErrorBox>
       ) : (
         <React.Fragment>
           {!isLoading ? <WeatherSummary weather={weather} /> : <Loader />}
